@@ -3,23 +3,37 @@
 function buildUI() {
   var tableContainer = document.createElement('div');
   tableContainer.id = 'timerTableContainer';
-  tableContainer.style.width = '100%';
+  tableContainer.style.width = '115%';
   tableContainer.style.height = '50px';
-  tableContainer.style.bottom = '0px';
+  tableContainer.style.bottom = '-90px';
   tableContainer.style.position = 'absolute';
-  tableContainer.innerHTML = '<table id="timerTable" style="width: 100%; table-layout: fixed;"></table>';
+  tableContainer.innerHTML = '<table id="timerTable" style="width: 100%; table-layout: fixed; background: #eee; border-top: 1px solid #666; padding: 5px 0;"></table>';
   document.body.appendChild(tableContainer);
   adjustColumns();
   adjustTimerBar();
   $(resetGameLogHeight);
 
+  //UI cleanup
+  //Hide the footer links for now
+  document.getElementById('footerLinks').style.display = 'none';
+  
+  //Hide the craft row for wood because it's redundant (this doesn't work at the moment)
+  //document.querySelector("table.craftTable tr.resourceRow").style.visibility = 'hidden';
+  
   $('#headerLinks').append(' | <a onclick="rebuildOptionsUI();$(\'#autoOptions\').toggle();" href="#">AutoKittens</a> | <a onclick="rebuildCalculatorUI();$(\'#kittenCalcs\').toggle();" href="#">Calculators</a>');
 
   var uiContainer = document.createElement('div');
-  uiContainer.className = 'help';
+  //uiContainer.className = 'help';
   uiContainer.id = 'autoOptions';
   uiContainer.style.display = 'none';
+  uiContainer.style.backgroundColor = '#ececec';
+  uiContainer.style.position = 'relative';
+  uiContainer.style.padding = '40px';
   uiContainer.style.overflowY = 'scroll';
+  uiContainer.style.lineHeight = '2em';
+  uiContainer.style.height = '300px';
+  uiContainer.style.width = '600px';
+  uiContainer.style.margin = '0px';
   $('#gamePageContainer').append(uiContainer);
 
   var calcContainer = document.createElement('div');
@@ -38,13 +52,11 @@ function adjustColumns() {
 function adjustTimerBar() {
   if (autoOptions.showTimerDisplays) {
     document.getElementById('timerTableContainer').style.display = '';
-    document.getElementById('game').style.marginBottom = '50px';
-    document.getElementById('footerLinks').style.marginBottom = '60px';
+    //document.getElementById('game').style.marginBottom = '50px';
     document.body.style.backgroundPosition = 'center bottom 30px';
   } else {
     document.getElementById('timerTableContainer').style.display = 'none';
     document.getElementById('game').style.marginBottom = '';
-    document.getElementById('footerLinks').style.marginBottom = '';
     document.body.style.backgroundPosition = '';
   }
 }
@@ -166,6 +178,8 @@ function rebuildOptionsUI() {
   addIndent(uiContainer);addInputField(uiContainer, 'autoOptions.craftOptions', 'plateAmount', 'Craft', 'plate(s) at a time');
   addCheckbox(uiContainer, 'autoOptions.craftOptions', 'craftAlloy', 'Automatically convert titanium to alloy');
   addIndent(uiContainer);addInputField(uiContainer, 'autoOptions.craftOptions', 'alloyAmount', 'Craft', 'alloy at a time');
+  addCheckbox(uiContainer, 'autoOptions.craftOptions', 'craftKerosene', 'Automatically convert oil to kerosene');
+  addIndent(uiContainer);addInputField(uiContainer, 'autoOptions.craftOptions', 'keroseneAmount', 'Craft', 'kerosene at a time');
 
   addHeading(uiContainer, 'Fur product crafting');
   addTriggerOptionMenu(uiContainer, 'autoOptions.furOptions', 'parchmentMode', 'Auto-craft parchment', [['never', 0], ['all, before hunting', 1], ['on full culture storage', 2], ['both', 3]], '', 'changeFurCrafts()');
@@ -273,7 +287,9 @@ var defaultOptions = {
     compediumAmount: 1,
     craftBlueprint: false,
     blueprintAmount: 1,
-    blueprintPriority: false
+    blueprintPriority: false,
+    craftKerosene: false,
+    keroseneAmount: 1
   },
   furOptions: {
     parchmentMode: 0,
@@ -475,7 +491,8 @@ var checkInterval = 200;
 // Based on http://www.reddit.com/r/kittensgame/comments/2eqlt5/a_few_kittens_game_scripts_ive_put_together/
 starClick = function () {
   if (autoOptions.autoStar) {
-    $("#gameLog").find("input").click();
+    //$("#gameLog").find("input").click();
+	$("#observeBtn").click();
   }
 }
 
@@ -524,7 +541,7 @@ tryCraft = function(craftName, amount) {
 }
 
 calculateCraftAmounts = function() {
-  var resources = ["wood", "beam", "slab", "steel", "plate", "alloy", "parchment", "manuscript", "blueprint", "compedium"]
+  var resources = ["wood", "beam", "slab", "steel", "plate", "alloy", "parchment", "manuscript", "blueprint", "compedium", "kerosene"]
   for (var i = 0; i < resources.length; i++) {
     var craft = gamePage.workshop.getCraft(resources[i]);
     var prices = craft.prices;
@@ -544,17 +561,18 @@ autoCraft = function () {
   if (!autoOptions.autoCraft)
     return;
   var resources = [
-    ["catnip",   "wood" , "craftWood", true],
-    ["wood",     "beam" , "craftBeam", gamePage.science.get('construction').researched],
-    ["minerals", "slab" , "craftSlab", gamePage.science.get('construction').researched],
-    ["coal",     "steel", "craftSteel", gamePage.science.get('construction').researched],
-    ["iron",     "plate", "craftPlate", gamePage.science.get('construction').researched],
-    ["titanium", "alloy", "craftAlloy", gamePage.science.get('construction').researched],
-    ["culture", "parchment", "craftParchment", gamePage.science.get('construction').researched],
-    ["culture", "manuscript", "craftManuscript", gamePage.science.get('construction').researched && (!autoOptions.craftOptions.festivalBuffer || gamePage.resPool.get('parchment').value > 2500 + 25 * autoOptions.craftOptions.manuscriptAmount)],
-    ["science", "blueprint", "craftBlueprint", gamePage.science.get('construction').researched && autoOptions.craftOptions.blueprintPriority],
-    ["science", "compedium", "craftCompendium", gamePage.science.get('construction').researched],
-    ["science", "blueprint", "craftBlueprint", gamePage.science.get('construction').researched && !autoOptions.craftOptions.blueprintPriority]
+    ["catnip",   "wood" ,      "craftWood",       true],
+    ["wood",     "beam" ,      "craftBeam",       gamePage.science.get('construction').researched],
+    ["minerals", "slab" ,      "craftSlab",       gamePage.science.get('construction').researched],
+    ["coal",     "steel",      "craftSteel",      gamePage.science.get('construction').researched],
+    ["iron",     "plate",      "craftPlate",      gamePage.science.get('construction').researched],
+    ["titanium", "alloy",      "craftAlloy",      gamePage.science.get('construction').researched],
+    ["oil",      "kerosene",   "craftKerosene",   gamePage.science.get('construction').researched],
+    ["culture",  "parchment",  "craftParchment",  gamePage.science.get('construction').researched],
+    ["culture",  "manuscript", "craftManuscript", gamePage.science.get('construction').researched && (!autoOptions.craftOptions.festivalBuffer || gamePage.resPool.get('parchment').value > 2500 + 25 * autoOptions.craftOptions.manuscriptAmount)],
+    ["science",  "blueprint",  "craftBlueprint",  gamePage.science.get('construction').researched && autoOptions.craftOptions.blueprintPriority],
+    ["science",  "compedium",  "craftCompendium", gamePage.science.get('construction').researched],
+    ["science",  "blueprint",  "craftBlueprint",  gamePage.science.get('construction').researched && !autoOptions.craftOptions.blueprintPriority]
   ];
   for (var i = 0; i < resources.length; i++) {
     var curRes = gamePage.resPool.get(resources[i][0]);
