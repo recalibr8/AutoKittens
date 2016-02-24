@@ -7,3 +7,8 @@ To use, create a bookmarklet to the following URL:
 
 Then simply launch the game and click the bookmarklet button. You should see a new menu option for AutoKittens, where you can configure all of the options.
 
+<b>New in version 1.1:</b>
+- Kerosene can be crafted automatically when oil reaches maximum storage limit.
+- Fixed: Astronomical events are automatically observed
+- Fixed: Trading happens automatically when gold limit is reached
+- Display optimized for iPad
