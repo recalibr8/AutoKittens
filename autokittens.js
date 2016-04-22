@@ -180,6 +180,8 @@ function rebuildOptionsUI() {
   addIndent(uiContainer);addInputField(uiContainer, 'autoOptions.craftOptions', 'alloyAmount', 'Craft', 'alloy at a time');
   addCheckbox(uiContainer, 'autoOptions.craftOptions', 'craftKerosene', 'Automatically convert oil to kerosene');
   addIndent(uiContainer);addInputField(uiContainer, 'autoOptions.craftOptions', 'keroseneAmount', 'Craft', 'kerosene at a time');
+  addCheckbox(uiContainer, 'autoOptions.craftOptions', 'craftEludium’, 'Automatically craft eludium');
+  addIndent(uiContainer);addInputField(uiContainer, 'autoOptions.craftOptions', ‘eludiumAmount', 'Craft', ‘eludium at a time');
 
   addHeading(uiContainer, 'Fur product crafting');
   addTriggerOptionMenu(uiContainer, 'autoOptions.furOptions', 'parchmentMode', 'Auto-craft parchment', [['never', 0], ['all, before hunting', 1], ['on full culture storage', 2], ['both', 3]], '', 'changeFurCrafts()');
@@ -289,7 +291,9 @@ var defaultOptions = {
     blueprintAmount: 1,
     blueprintPriority: false,
     craftKerosene: false,
-    keroseneAmount: 1
+    keroseneAmount: 1,
+    craftEludium: false,
+    eludiumAmount: 1
   },
   furOptions: {
     parchmentMode: 0,
@@ -541,7 +545,7 @@ tryCraft = function(craftName, amount) {
 }
 
 calculateCraftAmounts = function() {
-  var resources = ["wood", "beam", "slab", "steel", "plate", "alloy", "parchment", "manuscript", "blueprint", "compedium", "kerosene"]
+  var resources = ["wood", "beam", "slab", "steel", "plate", "alloy", "parchment", "manuscript", "blueprint", "compedium", "kerosene”, ”eludium”]
   for (var i = 0; i < resources.length; i++) {
     var craft = gamePage.workshop.getCraft(resources[i]);
     var prices = craft.prices;
@@ -568,6 +572,7 @@ autoCraft = function () {
     ["iron",     "plate",      "craftPlate",      gamePage.science.get('construction').researched],
     ["titanium", "alloy",      "craftAlloy",      gamePage.science.get('construction').researched],
     ["oil",      "kerosene",   "craftKerosene",   gamePage.science.get('construction').researched],
+    [“unobtanium”,      “eludium”,   "craftEludium”,   gamePage.science.get('construction').researched],
     ["culture",  "parchment",  "craftParchment",  gamePage.science.get('construction').researched],
     ["culture",  "manuscript", "craftManuscript", gamePage.science.get('construction').researched && (!autoOptions.craftOptions.festivalBuffer || gamePage.resPool.get('parchment').value > 2500 + 25 * autoOptions.craftOptions.manuscriptAmount)],
     ["science",  "blueprint",  "craftBlueprint",  gamePage.science.get('construction').researched && autoOptions.craftOptions.blueprintPriority],
