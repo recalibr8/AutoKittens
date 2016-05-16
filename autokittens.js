@@ -180,8 +180,8 @@ function rebuildOptionsUI() {
   addIndent(uiContainer);addInputField(uiContainer, 'autoOptions.craftOptions', 'alloyAmount', 'Craft', 'alloy at a time');
   addCheckbox(uiContainer, 'autoOptions.craftOptions', 'craftKerosene', 'Automatically convert oil to kerosene');
   addIndent(uiContainer);addInputField(uiContainer, 'autoOptions.craftOptions', 'keroseneAmount', 'Craft', 'kerosene at a time');
-  addCheckbox(uiContainer, 'autoOptions.craftOptions', 'craftEludium’, 'Automatically craft eludium');
-  addIndent(uiContainer);addInputField(uiContainer, 'autoOptions.craftOptions', ‘eludiumAmount', 'Craft', ‘eludium at a time');
+  addCheckbox(uiContainer, 'autoOptions.craftOptions', 'craftEludium', 'Automatically craft eludium');
+  addIndent(uiContainer);addInputField(uiContainer, 'autoOptions.craftOptions', 'eludiumAmount', 'Craft', 'eludium at a time');
 
   addHeading(uiContainer, 'Fur product crafting');
   addTriggerOptionMenu(uiContainer, 'autoOptions.furOptions', 'parchmentMode', 'Auto-craft parchment', [['never', 0], ['all, before hunting', 1], ['on full culture storage', 2], ['both', 3]], '', 'changeFurCrafts()');
