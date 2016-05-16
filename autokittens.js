@@ -545,7 +545,7 @@ tryCraft = function(craftName, amount) {
 }
 
 calculateCraftAmounts = function() {
-  var resources = ["wood", "beam", "slab", "steel", "plate", "alloy", "parchment", "manuscript", "blueprint", "compedium", "kerosene”, ”eludium”]
+  var resources = ["wood", "beam", "slab", "steel", "plate", "alloy", "parchment", "manuscript", "blueprint", "compedium", "kerosene", "eludium"]
   for (var i = 0; i < resources.length; i++) {
     var craft = gamePage.workshop.getCraft(resources[i]);
     var prices = craft.prices;
@@ -565,19 +565,19 @@ autoCraft = function () {
   if (!autoOptions.autoCraft)
     return;
   var resources = [
-    ["catnip",   "wood" ,      "craftWood",       true],
-    ["wood",     "beam" ,      "craftBeam",       gamePage.science.get('construction').researched],
-    ["minerals", "slab" ,      "craftSlab",       gamePage.science.get('construction').researched],
-    ["coal",     "steel",      "craftSteel",      gamePage.science.get('construction').researched],
-    ["iron",     "plate",      "craftPlate",      gamePage.science.get('construction').researched],
-    ["titanium", "alloy",      "craftAlloy",      gamePage.science.get('construction').researched],
-    ["oil",      "kerosene",   "craftKerosene",   gamePage.science.get('construction').researched],
-    [“unobtanium”,      “eludium”,   "craftEludium”,   gamePage.science.get('construction').researched],
-    ["culture",  "parchment",  "craftParchment",  gamePage.science.get('construction').researched],
-    ["culture",  "manuscript", "craftManuscript", gamePage.science.get('construction').researched && (!autoOptions.craftOptions.festivalBuffer || gamePage.resPool.get('parchment').value > 2500 + 25 * autoOptions.craftOptions.manuscriptAmount)],
-    ["science",  "blueprint",  "craftBlueprint",  gamePage.science.get('construction').researched && autoOptions.craftOptions.blueprintPriority],
-    ["science",  "compedium",  "craftCompendium", gamePage.science.get('construction').researched],
-    ["science",  "blueprint",  "craftBlueprint",  gamePage.science.get('construction').researched && !autoOptions.craftOptions.blueprintPriority]
+    ["catnip",		"wood" ,	"craftWood",		true],
+    ["wood",		"beam" ,	"craftBeam",		gamePage.science.get('construction').researched],
+    ["minerals",	"slab" ,	"craftSlab",		gamePage.science.get('construction').researched],
+    ["coal",		"steel",	"craftSteel",		gamePage.science.get('construction').researched],
+    ["iron",		"plate",	"craftPlate",		gamePage.science.get('construction').researched],
+    ["titanium",	"alloy",	"craftAlloy",		gamePage.science.get('construction').researched],
+    ["oil",		"kerosene",	"craftKerosene",	gamePage.science.get('construction').researched],
+    ["unobtanium",	"eludium",	"craftEludium",		gamePage.science.get('construction').researched],
+    ["culture",		"parchment",	"craftParchment",	gamePage.science.get('construction').researched],
+    ["culture",		"manuscript",	"craftManuscript",	gamePage.science.get('construction').researched && (!autoOptions.craftOptions.festivalBuffer || gamePage.resPool.get('parchment').value > 2500 + 25 * autoOptions.craftOptions.manuscriptAmount)],
+    ["science",		"blueprint",	"craftBlueprint",	gamePage.science.get('construction').researched && autoOptions.craftOptions.blueprintPriority],
+    ["science",		"compedium",	"craftCompendium",	gamePage.science.get('construction').researched],
+    ["science",		"blueprint",	"craftBlueprint",	gamePage.science.get('construction').researched && !autoOptions.craftOptions.blueprintPriority]
   ];
   for (var i = 0; i < resources.length; i++) {
     var curRes = gamePage.resPool.get(resources[i][0]);
